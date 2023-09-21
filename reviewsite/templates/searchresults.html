@@ -1,0 +1,66 @@
+<h1>Search Result</h1>
+<style type="text/css">
+	table, th, td {border: 1px solid black;}
+</style>
+
+{% if res %}
+
+<table>
+	<tr><th>Name</th><th>Score</th><th>Summary</th><th>Details</th></tr>
+	{% for doc in res %}
+	<tr>
+		<td><a href="{{url_for('asinLookup', asin=doc['asin'])}}">{{doc['productName']}}</a></td>
+		<td>{{doc['reviewScore']}}</td>
+		<td>{{doc['reviewSummary']}}</td>
+		<td><a href="{{url_for('idLookup', reviewid=doc['id'])}}">Details</a></td>
+
+	</tr>
+	{% endfor %}
+	</table>
+	
+<h3>Showing {{start}} - {{end}} of {{count}}</h3>
+<br><br><a href="{{url_for('searchForm')}}">New Search</a><br><br>
+
+<table>
+	<tr><th>Paging</th><th>Faceting</th></tr>
+	<tr>
+		<td>
+        
+        {% if not prev_url %}
+        	Previous
+        {% else %}	
+            <a href="{{ prev_url or '#' }}">
+                <span aria-hidden="true">&larr;</span> Previous
+            </a>
+		{% endif %}
+
+        {% if not next_url %}
+        	<br>Next
+        {% else %}	
+        <br>
+        <a href="{{ next_url or '#' }}">
+                Next <span aria-hidden="true">&rarr;</span>
+            </a>
+		{% endif %}
+
+		</td>
+<td>
+	<table>
+		<tr><th>Score</th><th>Count</th></tr>
+			{% for i in range(0,facet['facet_fields']['overall']|length,2) %}
+			<tr>
+				<td>{{facet['facet_fields']['overall'][i]}}</td>
+				<td>{{facet['facet_fields']['overall'][i+1]}}</td>
+				<td><a href="{{url_for('searchResults', query=keywords, page_number=0, score=facet['facet_fields']['overall'][i])}}">View</a></td>
+			</tr>
+		
+	{% endfor %}
+
+	</table>
+</td>
+</tr>
+</table>
+{% else %}
+ Oops!!! No results found for given search!!
+ <br><br><a href="{{url_for('searchForm')}}">New Search</a><br><br>
+{% endif %}
