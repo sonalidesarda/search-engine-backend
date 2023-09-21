@@ -12,7 +12,7 @@ def review_query_dictionary(kw="", start=0, pageSize = 5, score_facet=None):
     return {"q": qvalue, "start": start, "rows":pageSize, "facet.field": "overall", "facet.sort":"index"}
 
 
-def do_query(params, port="8983", collection="reviews"):
+def do_query(params, port="8983", collection="amazon_reviews"):
     
     param_arg = "&".join(list(map(lambda p: f"{p[0]}={p[1]}", list(params.items()))))
     query_string = f"http://localhost:{port}/solr/{collection}/select"
@@ -37,7 +37,7 @@ def product_search(asin):
 
 
 def id_search(id):
-    return do_query(id_query_dictionary(id), collection="reviews")
+    return do_query(id_query_dictionary(id), collection="amazon_reviews")
 
 def id_query_dictionary(id):
     return {"q": f"id:{id}"}

@@ -1,5 +1,5 @@
 import os
-from flask import request, Flask, jsonify, render_template,redirect
+from flask import request, Flask, jsonify, render_template,redirect, url_for
 import reviewsite.solrinterface as solr
 from reviewsite.forms import ReviewSearchForm
 from flask_cors import CORS
@@ -31,9 +31,9 @@ def create_app(test_config=None):
     ## Application code begins
     @app.route('/', methods=['GET'])
     def index():
-        review_count = solr.do_query({"q": "*:*", "rows": 0}, collection="reviews").get("response", dict()).get(
+        review_count = solr.do_query({"q": "*:*", "rows": 0}, collection="amazon_reviews").get("response", dict()).get(
             "numFound", -1)
-        product_count = solr.do_query({"q": "*:*", "rows": 0}, collection="products").get("response", dict()).get(
+        product_count = solr.do_query({"q": "*:*", "rows": 0}, collection="amazon_products").get("response", dict()).get(
             "numFound", -1)
         return render_template('index.html', reviewcount=review_count, productcount=product_count)
 
@@ -54,8 +54,12 @@ def create_app(test_config=None):
         pageSize = request.args.get('pageSize', type=int)
         pageNumber = request.args.get('pageNumber', type=int)
         score_facet = request.args.get('score', type=int)
-        start = pageNumber * pageSize
-        reviews = solr.review_search(query, start,pageSize, score_facet)
+        
+        start = 0
+        if pageSize and pageNumber:
+            start = pageNumber * pageSize
+
+        reviews = solr.review_search(query, start, pageSize, score_facet)
 
         review_search_result = list()
         end = None

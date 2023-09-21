@@ -1,32 +1,35 @@
+# Search Engine Backend
 
-Step 1 - Go to solr directory and Start solr
-bin/solr start
+### Step 1. Download solr
+1. Use [link](https://solr.apache.org/downloads.html) to download solr version 8.x.x..
+2. Untar solr binary into project directory. Run following commands:
+```
+cd <project_dir>
+mkdir solr
+tar -xvf <solr_tgz_path> --strip-components=1 -C solr
+```
 
-Step 2 - Create the products and reviews collections using the configuration directories. 
+### Step 2. Create python virtual environment and download dependencies
+Run following commands:
+```
+cd <project_dir>
+virtualenv -p python3 venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
 
-Syntax- bin/solr create_collection -c your_collection_name -d /path/to/config
+### Step 3. Setup solr and load data
+Run following commands to setup solr
+```
+cd <project_dir>
+chmod +x setup_solr.sh
+./setup_solr.sh
+```
 
-Open terminal and go to solr directory and run following command 
-solr create_collection -c products -d products
-solr create_collection -c reviews -d reviews
-
-Example - 
-bin/solr create_core -c amazon_products -d /Users/sonalidesarda/Documents/CPSC5340_InformationRetrieval/CPSC5340_Project_Work/Assignment2/products 
-
-bin/solr create_core -c amazon_reviews -d /Users/sonalidesarda/Documents/CPSC5340_InformationRetrieval/CPSC5340_Project_Work/Assignment2/reviews 
-
-
-Step 3 - Run python script to load data in solr collection-
-python LoadDataToSolr.py test-products.txt test-reviews.txt 
-
-
-Step 4 - Start Flask, pointing it at your project directory. 
-Windows - 
-set FLASK_APP=reviewsite
-set FLASK_DEBUG=1
-flask run
-
-Bash -
-export FLASK_APP=reviewsite
+### Step 4. Start flask web server
+Run following commands:
+```
 export FLASK_DEBUG=1
+export FLASK_APP=reviewsite
 flask run
+```

@@ -6,6 +6,8 @@ import json
 import os
 import pickle
 
+TMP_FILENAME = "products_asin.txt"
+
 def productJSON(filename):
     product_set = set()
     docs = []
@@ -35,12 +37,12 @@ def productJSON(filename):
             product_set.add(filtered_dict["asin"])
             docs.append(filtered_dict)
 
-    pickle.dump(product_set, open("products_asin.txt", "wb"))
+    pickle.dump(product_set, open(TMP_FILENAME, "wb"))
     return docs      
     
 def reviewJSON(filename):
     docs = []
-    products_asin = pickle.load( open( "products_asin.txt", "rb" ))
+    products_asin = pickle.load( open(TMP_FILENAME, "rb"))
     with open(filename) as f:
         for line in f:
             product_details_dict = eval(line)
@@ -87,4 +89,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+    os.remove(TMP_FILENAME)
+    print("Loaded products and reviews data successfully in solr")
 
