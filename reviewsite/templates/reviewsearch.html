@@ -1,0 +1,21 @@
+<h1>Review Search Form</h1>
+
+	<!-- We aren't using this, but we should be
+     {% if form.keywords.errors %}
+        <ul class="errors">
+			{% for error in form.keywords.errors %}
+				<li>{{ error }}</li>
+			{% endfor %}
+	 {% endif %}
+	 -->
+
+    <form action="" method="post" >
+		{{ form.csrf_token }}
+        <div>
+            {{ form.keywords.label }}<br>
+            {{ form.keywords(size=32) }}
+        </div>
+		<div>
+			{{ form.submit() }}
+		</div>
+    </form>
