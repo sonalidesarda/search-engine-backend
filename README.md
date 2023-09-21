@@ -33,3 +33,9 @@ export FLASK_DEBUG=1
 export FLASK_APP=reviewsite
 flask run
 ```
+
+### API Endpoint
+Following is the API to get the search results:
+```
+GET /searchresults?query={query_string}&pageNumber={page_number_int}&pageSize={page_size_int}
+```
